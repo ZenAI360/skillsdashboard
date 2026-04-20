@@ -10,6 +10,8 @@
 
 **Skills Dashboard**, yüklü tüm Claude skill'lerini tek bir sayfada görselleştiren, arayabileceğiniz ve düzenleyebileceğiniz saf HTML/CSS/React uygulamasıdır. Hiçbir kurulum gerektirmez — tek bir `.html` dosyasını tarayıcıda açmanız yeterlidir.
 
+🥳İlham: Peter Guirguis'in Skills Arsenal projesinden esinlenildi.
+
 ### Özellikler
 
 | Özellik | Açıklama |
@@ -194,6 +196,8 @@ MIT
 ### What is it?
 
 **Skills Dashboard** is a zero-dependency, single-file HTML/CSS/React application that lets you visualize, search, and curate all your installed Claude skills in one place. No build step, no server — just open `Skills Dashboard.html` in a browser.
+
+🥳 Inspired by Peter Guirguis's “Skills Arsenal” project.
 
 ### Features
 
