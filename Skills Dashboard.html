@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Skills Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --f-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --f-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 300ms;
+  --r-sm: 8px; --r: 10px; --r-lg: 14px; --r-xl: 16px; --r-2xl: 20px; --r-pill: 9999px;
+  --accent: #3D7AF5; --accent-light: #7ba5f7; --accent-dark: #2D6AE5;
+  --accent-glow-1: rgba(61,122,245,0.35); --accent-glow-2: rgba(61,122,245,0.18);
+  --accent-10: rgba(61,122,245,0.10); --accent-20: rgba(61,122,245,0.20); --accent-30: rgba(61,122,245,0.30);
+  --orb-rgb: 61,122,245; --hero-mid: #5b94f7;
+}
+html[data-theme="dark"] {
+  --bg-primary: #080C16; --bg-secondary: #070b19; --bg-deep: #050810;
+  --bg-card: #0B101C; --bg-card-hover: #121a2e; --bg-badge: rgba(255,255,255,0.04);
+  --bg-input: #0d1422; --bg-modal: rgba(5,8,16,0.82); --bg-chip: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.15);
+  --border-faint: rgba(255,255,255,0.05); --border-hover: rgba(255,255,255,0.18);
+  --text-primary: #e8edf8; --text-secondary: #9ba8c0; --text-tertiary: #6b7890; --text-faint: #4a5568;
+  --star-color: #FFB347; --danger: #FF6B6B; --danger-bg: rgba(255,107,107,0.08); --danger-border: rgba(255,107,107,0.25);
+  --success: #4ECB71; --warn: #FFB347;
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.02) inset, 0 4px 16px rgba(0,0,0,0.35);
+  --shadow-card-hover: 0 1px 0 rgba(255,255,255,0.04) inset, 0 16px 48px rgba(0,0,0,0.55);
+  --shadow-pop: 0 20px 60px rgba(0,0,0,0.6);
+  --scrollbar-track: #070b19; --scrollbar-thumb: #1e2a44;
+  --orb-opacity: 0.55; --glass-bg: rgba(11,16,28,0.72); --glass-border: rgba(255,255,255,0.08);
+}
+html[data-theme="light"] {
+  --bg-primary: #f6f7fb; --bg-secondary: #eef1f8; --bg-deep: #e5e9f2;
+  --bg-card: #ffffff; --bg-card-hover: #fbfcff; --bg-badge: rgba(15,23,42,0.04);
+  --bg-input: #ffffff; --bg-modal: rgba(15,23,42,0.35); --bg-chip: rgba(15,23,42,0.04);
+  --border: rgba(15,23,42,0.10); --border-strong: rgba(15,23,42,0.18);
+  --border-faint: rgba(15,23,42,0.06); --border-hover: rgba(15,23,42,0.22);
+  --text-primary: #0b1226; --text-secondary: #4a5674; --text-tertiary: #6b7890; --text-faint: #9aa3b8;
+  --star-color: #e69500; --danger: #d4183d; --danger-bg: rgba(212,24,61,0.06); --danger-border: rgba(212,24,61,0.2);
+  --success: #0f9d58; --warn: #e69500;
+  --shadow-card: 0 1px 2px rgba(15,23,42,0.04), 0 2px 8px rgba(15,23,42,0.04);
+  --shadow-card-hover: 0 8px 28px rgba(15,23,42,0.10); --shadow-pop: 0 20px 60px rgba(15,23,42,0.18);
+  --scrollbar-track: #eef1f8; --scrollbar-thumb: #c4cbdc;
+  --orb-opacity: 0.28; --glass-bg: rgba(255,255,255,0.72); --glass-border: rgba(15,23,42,0.08);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--f-body); background: var(--bg-primary); color: var(--text-primary);
+  font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  min-height: 100vh; overflow-x: hidden;
+  transition: background var(--dur) var(--ease-std), color var(--dur) var(--ease-std);
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; padding: 0; }
+input { font-family: inherit; }
+::selection { background: var(--accent-30); color: var(--text-primary); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; border: 2px solid var(--scrollbar-track); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+.ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: var(--orb-opacity); animation: orbFloat 22s var(--ease-std) infinite; will-change: transform; }
+.orb-1 { width: 520px; height: 520px; top: -120px; left: -140px; background: rgba(var(--orb-rgb), 0.55); }
+.orb-2 { width: 640px; height: 640px; top: 30%; right: -180px; background: rgba(var(--orb-rgb), 0.40); animation-duration: 28s; animation-delay: -6s; }
+.orb-3 { width: 460px; height: 460px; bottom: -120px; left: 25%; background: rgba(var(--orb-rgb), 0.30); animation-duration: 32s; animation-delay: -12s; }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(60px,-40px) scale(1.08); }
+  66% { transform: translate(-50px,50px) scale(0.95); }
+}
+
+.app { position: relative; z-index: 1; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+
+.header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); background: var(--glass-bg); border-bottom: 1px solid var(--glass-border); transition: background var(--dur) var(--ease-std), border-color var(--dur) var(--ease-std); }
+.header-inner { display: flex; align-items: center; gap: 20px; padding: 14px 0; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); display: grid; place-items: center; box-shadow: 0 8px 24px var(--accent-glow-1), inset 0 1px 0 rgba(255,255,255,0.3); color: white; flex-shrink: 0; }
+.brand-mark svg { width: 20px; height: 20px; }
+.brand-title { font-family: var(--f-display); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; color: var(--text-primary); line-height: 1.1; }
+.header-spacer { flex: 1; }
+.count-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--r-pill); background: var(--accent-10); border: 1px solid var(--accent-20); color: var(--accent); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.count-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.icon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.icon-btn { width: 38px; height: 38px; border-radius: var(--r); background: var(--bg-badge); border: 1px solid var(--border); color: var(--text-secondary); display: grid; place-items: center; transition: all var(--dur) var(--ease-std); }
+.icon-btn:hover { background: var(--bg-card-hover); border-color: var(--border-hover); color: var(--text-primary); transform: translateY(-1px); }
+.icon-btn svg { width: 17px; height: 17px; }
+.icon-btn.is-active { background: var(--accent-10); border-color: var(--accent-30); color: var(--accent); }
+.tweaks-close { margin-left: auto; width: 24px; height: 24px; border-radius: 6px; background: var(--bg-badge); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-tertiary); transition: all var(--dur) var(--ease-std); }
+.tweaks-close:hover { color: var(--danger); border-color: var(--danger-border); }
+.tweaks-close svg { width: 12px; height: 12px; }
+.theme-toggle { width: 64px; height: 34px; border-radius: var(--r-pill); background: var(--bg-badge); border: 1px solid var(--border); position: relative; transition: all var(--dur) var(--ease-std); }
+.theme-toggle:hover { border-color: var(--border-hover); }
+.theme-thumb { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-light)); display: grid; place-items: center; color: white; transition: transform var(--dur) var(--ease); box-shadow: 0 2px 8px var(--accent-glow-1); }
+.theme-thumb svg { width: 14px; height: 14px; }
+html[data-theme="light"] .theme-thumb { transform: translateX(30px); }
+
+.hero { padding: 64px 0 32px; text-align: center; position: relative; }
+.hero-eyebrow { display: inline-block; padding: 6px 14px; border-radius: var(--r-pill); background: var(--accent-10); border: 1px solid var(--accent-20); color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 20px; }
+.hero-title { font-family: var(--f-display); font-weight: 700; font-size: clamp(32px, 5vw, 56px); line-height: 1.08; letter-spacing: -0.03em; margin: 0 0 16px; color: var(--text-primary); text-wrap: balance; }
+.hero-title .grad { background: linear-gradient(135deg, var(--accent) 0%, var(--hero-mid) 55%, var(--accent-light) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-sub { font-size: 17px; color: var(--text-secondary); max-width: 620px; margin: 0 auto 32px; line-height: 1.55; }
+.search-wrap { max-width: 720px; margin: 0 auto 20px; position: relative; }
+.search-input { width: 100%; height: 56px; padding: 0 110px 0 52px; border-radius: var(--r-pill); background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); font-size: 16px; outline: none; box-shadow: var(--shadow-card); transition: all var(--dur) var(--ease-std); }
+.search-input::placeholder { color: var(--text-tertiary); }
+.search-input:focus { border-color: var(--accent-30); box-shadow: var(--shadow-card), 0 0 0 4px var(--accent-10); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); pointer-events: none; }
+.search-icon svg { width: 18px; height: 18px; }
+.search-shortcut { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; }
+.kbd { font-family: var(--f-mono); font-size: 12px; padding: 3px 8px; border-radius: 6px; background: var(--bg-badge); border: 1px solid var(--border); color: var(--text-tertiary); }
+.clear-btn { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-badge); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-tertiary); transition: all var(--dur) var(--ease-std); }
+.clear-btn:hover { color: var(--danger); border-color: var(--danger-border); background: var(--danger-bg); }
+.clear-btn svg { width: 12px; height: 12px; }
+.search-modes { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--r-pill); background: var(--bg-card); border: 1px solid var(--border); margin: 0 auto; }
+.mode-btn { padding: 8px 16px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: all var(--dur) var(--ease-std); display: inline-flex; align-items: center; gap: 6px; }
+.mode-btn svg { width: 14px; height: 14px; }
+.mode-btn:hover { color: var(--text-primary); }
+.mode-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; box-shadow: 0 4px 12px var(--accent-glow-1); }
+
+.stats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 24px 0 8px; }
+.stat { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: var(--r-pill); background: var(--bg-card); border: 1px solid var(--border); font-size: 13px; transition: all var(--dur) var(--ease-std); }
+.stat:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.stat-value { font-family: var(--f-display); font-weight: 700; font-size: 17px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.stat-label { color: var(--text-secondary); font-weight: 500; }
+.stat.clickable { cursor: pointer; }
+.stat.clickable:hover { border-color: var(--accent-30); }
+.stat .chev { width: 14px; height: 14px; color: var(--text-tertiary); transition: transform var(--dur) var(--ease); }
+.stat.open .chev { transform: rotate(180deg); color: var(--accent); }
+.stat-dup { color: var(--danger); }
+.stat-dup .stat-value { color: var(--danger); }
+.source-panel { margin: 0 0 8px; padding: 18px; border-radius: var(--r-xl); background: var(--bg-card); border: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 8px; animation: fadeInDown 0.4s var(--ease); }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.source-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: var(--r-pill); background: var(--bg-badge); border: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+.source-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+.source-pill .cnt { font-family: var(--f-mono); font-weight: 600; color: var(--text-primary); padding: 1px 6px; border-radius: 4px; background: var(--bg-chip); font-size: 11px; }
+
+.section { margin: 24px 0; }
+.section-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; cursor: pointer; user-select: none; }
+.section-head h3 { font-family: var(--f-display); font-weight: 600; font-size: 16px; margin: 0; color: var(--text-primary); letter-spacing: -0.005em; }
+.section-head .chev { width: 14px; height: 14px; color: var(--text-tertiary); transition: transform var(--dur) var(--ease); }
+.section-head.closed .chev { transform: rotate(-90deg); }
+.section-head .cnt { font-size: 12px; padding: 2px 8px; border-radius: var(--r-pill); background: var(--bg-badge); color: var(--text-secondary); font-weight: 500; font-variant-numeric: tabular-nums; }
+.section-head .actions { margin-left: auto; display: flex; gap: 6px; }
+.mini-btn { font-size: 12px; padding: 5px 10px; border-radius: var(--r); background: var(--bg-badge); border: 1px solid var(--border); color: var(--text-secondary); display: inline-flex; align-items: center; gap: 4px; transition: all var(--dur) var(--ease-std); }
+.mini-btn:hover { color: var(--text-primary); border-color: var(--border-hover); }
+.mini-btn svg { width: 12px; height: 12px; }
+
+.spotlight { padding: 20px 22px; border-radius: var(--r-xl); background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); display: flex; align-items: center; gap: 16px; position: relative; overflow: hidden; }
+.spotlight::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 0% 50%, var(--accent-10), transparent 60%); pointer-events: none; }
+.spotlight-body { flex: 1; position: relative; }
+.spotlight-kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.spotlight-name { font-family: var(--f-display); font-weight: 600; font-size: 18px; color: var(--text-primary); margin-bottom: 2px; }
+.spotlight-for { font-size: 13px; color: var(--text-secondary); font-style: italic; }
+.spot-refresh { width: 40px; height: 40px; border-radius: var(--r); background: var(--bg-badge); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-secondary); transition: all var(--dur) var(--ease-std); flex-shrink: 0; }
+.spot-refresh:hover { color: var(--accent); border-color: var(--accent-30); transform: rotate(90deg); }
+.spot-refresh svg { width: 16px; height: 16px; }
+
+.dup-banner { padding: 16px 18px; border-radius: var(--r-xl); background: var(--danger-bg); border: 1px solid var(--danger-border); border-left: 3px solid var(--danger); margin: 16px 0; }
+.dup-head { display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-primary); font-weight: 500; font-size: 14px; }
+.dup-head .icon-wrap { width: 28px; height: 28px; border-radius: 8px; background: var(--danger-bg); border: 1px solid var(--danger-border); display: grid; place-items: center; color: var(--danger); flex-shrink: 0; }
+.dup-head .icon-wrap svg { width: 14px; height: 14px; }
+.dup-head .chev { margin-left: auto; color: var(--text-tertiary); transition: transform var(--dur) var(--ease); width: 14px; height: 14px; }
+.dup-head.open .chev { transform: rotate(180deg); }
+.dup-body { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+.dup-group { padding: 12px 14px; border-radius: var(--r); background: var(--bg-card); border: 1px solid var(--border); }
+.dup-group-title { font-size: 12px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 8px; }
+.dup-group-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.dup-item { font-size: 12px; padding: 4px 10px; border-radius: var(--r-pill); background: var(--bg-badge); border: 1px solid var(--border); color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px; }
+.dup-item .src-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0 8px; }
+.tab { padding: 7px 14px; border-radius: var(--r-pill); background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; font-weight: 500; transition: all var(--dur) var(--ease-std); display: inline-flex; align-items: center; gap: 6px; }
+.tab:hover { color: var(--text-primary); border-color: var(--border-hover); }
+.tab.active { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border-color: transparent; box-shadow: 0 4px 14px var(--accent-glow-1); }
+.tab .cnt { font-variant-numeric: tabular-nums; font-size: 11px; opacity: 0.7; padding: 1px 6px; border-radius: var(--r-pill); background: rgba(0,0,0,0.2); }
+.tab.active .cnt { background: rgba(255,255,255,0.2); opacity: 1; }
+.result-count { font-size: 13px; color: var(--text-tertiary); margin: 8px 0 14px; font-variant-numeric: tabular-nums; }
+.result-count strong { color: var(--text-primary); font-weight: 600; }
+
+.cat-group { margin-bottom: 28px; }
+.cat-group-head { display: flex; align-items: center; gap: 10px; padding: 10px 4px; margin: 0 0 12px; cursor: pointer; border-bottom: 1px solid var(--border-faint); user-select: none; }
+.cat-group-head .chev { width: 16px; height: 16px; color: var(--text-tertiary); transition: transform var(--dur) var(--ease); }
+.cat-group-head.closed .chev { transform: rotate(-90deg); }
+.cat-group-head h4 { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 17px; color: var(--text-primary); letter-spacing: -0.005em; }
+.cat-group-head .cnt { font-size: 12px; padding: 2px 8px; border-radius: var(--r-pill); background: var(--bg-badge); color: var(--text-secondary); font-weight: 500; margin-left: auto; font-variant-numeric: tabular-nums; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+
+.card { position: relative; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 20px; cursor: pointer; transition: transform var(--dur) var(--ease-std), border-color var(--dur) var(--ease-std), box-shadow var(--dur) var(--ease-std), background var(--dur) var(--ease-std); overflow: hidden; animation: cardIn 0.55s var(--ease) both; display: flex; flex-direction: column; gap: 10px; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent)); opacity: 0; transition: opacity var(--dur) var(--ease-std); border-top-left-radius: var(--r-xl); border-top-right-radius: var(--r-xl); }
+.card:hover { transform: translateY(-3px); border-color: var(--border-hover); box-shadow: var(--shadow-card-hover); background: var(--bg-card-hover); }
+.card:hover::before { opacity: 1; }
+.card.expanded { transform: translateY(-2px); border-color: var(--accent-30); box-shadow: var(--shadow-card-hover); }
+.card.expanded::before { opacity: 1; }
+.card-head { display: flex; align-items: flex-start; gap: 12px; }
+.card-title-wrap { flex: 1; min-width: 0; }
+.card-title { font-family: var(--f-display); font-weight: 600; font-size: 16px; color: var(--text-primary); line-height: 1.25; letter-spacing: -0.005em; margin: 0; }
+.card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card.expanded .card-desc { -webkit-line-clamp: unset; overflow: visible; }
+.card-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: var(--r-pill); border: 1px solid var(--border); background: var(--bg-badge); color: var(--text-secondary); }
+.badge.src { color: var(--src-color, var(--accent)); border-color: var(--src-border, var(--border)); background: var(--src-bg, var(--bg-badge)); }
+.badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--src-color, var(--accent)); }
+.best-for { font-size: 13px; font-style: italic; color: var(--accent); font-weight: 500; padding-top: 2px; display: flex; gap: 6px; }
+.best-for-label { font-style: normal; color: var(--text-tertiary); font-weight: 500; }
+.star-btn { width: 32px; height: 32px; border-radius: var(--r); background: transparent; border: 1px solid transparent; display: grid; place-items: center; color: var(--text-tertiary); transition: all var(--dur) var(--ease-std); flex-shrink: 0; }
+.star-btn:hover { color: var(--star-color); background: var(--bg-badge); transform: scale(1.1); }
+.star-btn.on { color: var(--star-color); }
+.star-btn svg { width: 16px; height: 16px; }
+.card-triggers { overflow: hidden; max-height: 0; transition: max-height 0.4s var(--ease), padding var(--dur) var(--ease); padding: 0; }
+.card.expanded .card-triggers { max-height: 400px; padding-top: 6px; }
+.triggers-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.triggers-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--f-mono); font-size: 11.5px; padding: 4px 9px; border-radius: 6px; background: var(--accent-10); border: 1px solid var(--accent-20); color: var(--accent); }
+.expand-hint { font-size: 11px; color: var(--text-faint); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+.expand-hint svg { width: 10px; height: 10px; }
+.card.expanded .expand-hint { opacity: 0; height: 0; margin: 0; }
+
+.layout-list .grid { grid-template-columns: 1fr; gap: 8px; }
+.layout-list .card { padding: 14px 18px; }
+.layout-list .card-head { flex-direction: row; align-items: center; }
+.layout-list .card-title-wrap { display: flex; flex-direction: row; align-items: center; gap: 14px; flex-wrap: wrap; }
+.layout-list .card-title { font-size: 15px; }
+.layout-list .card-desc { font-size: 13px; -webkit-line-clamp: 1; }
+.layout-list .best-for { margin-left: auto; font-size: 12px; }
+.layout-list .card-badges { flex-shrink: 0; }
+.layout-magazine .grid { grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.layout-magazine .card { grid-column: span 2; }
+.layout-magazine .card:nth-child(7n+1) { grid-column: span 3; }
+.layout-magazine .card:nth-child(7n+2) { grid-column: span 3; }
+.layout-magazine .card:nth-child(7n+5) { grid-column: span 4; }
+.layout-magazine .card:nth-child(7n+6) { grid-column: span 2; }
+@media (max-width: 960px) { .layout-magazine .grid { grid-template-columns: 1fr 1fr; } .layout-magazine .card { grid-column: span 1 !important; } }
+.density-compact .card { padding: 14px 16px; gap: 7px; }
+.density-compact .card-title { font-size: 14px; }
+.density-compact .card-desc { font-size: 12.5px; }
+
+.to-top { position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-pop); display: grid; place-items: center; color: var(--text-primary); z-index: 30; opacity: 0; transform: translateY(16px) scale(0.8); pointer-events: none; transition: all var(--dur) var(--ease); }
+.to-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.to-top:hover { border-color: var(--accent-30); color: var(--accent); }
+.to-top svg { width: 18px; height: 18px; }
+
+.footer { text-align: center; padding: 48px 0 36px; color: var(--text-tertiary); font-size: 13px; }
+.footer strong { color: var(--text-primary); font-weight: 600; }
+.footer-divider { height: 1px; max-width: 400px; margin: 0 auto 22px; background: linear-gradient(90deg, transparent, var(--border-strong), transparent); }
+
+.modal-backdrop { position: fixed; inset: 0; background: var(--bg-modal); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 100; display: grid; place-items: center; padding: 20px; animation: fadeIn 0.25s var(--ease); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-2xl); padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow-pop); animation: popIn 0.35s var(--ease); }
+@keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.modal-head { display: flex; align-items: center; margin-bottom: 18px; }
+.modal-title { font-family: var(--f-display); font-weight: 600; font-size: 18px; color: var(--text-primary); }
+.modal-close { margin-left: auto; width: 32px; height: 32px; border-radius: 8px; background: var(--bg-badge); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-secondary); transition: all var(--dur) var(--ease-std); }
+.modal-close:hover { color: var(--danger); border-color: var(--danger-border); }
+.modal-close svg { width: 14px; height: 14px; }
+.swatch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.swatch { aspect-ratio: 1; border-radius: var(--r-lg); border: 2px solid transparent; position: relative; cursor: pointer; transition: all var(--dur) var(--ease); overflow: hidden; }
+.swatch:hover { transform: translateY(-2px) scale(1.03); }
+.swatch.active { border-color: var(--text-primary); transform: scale(1.05); }
+.swatch .check { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background: white; color: #111; display: grid; place-items: center; opacity: 0; transition: opacity var(--dur) var(--ease); }
+.swatch.active .check { opacity: 1; }
+.swatch .check svg { width: 12px; height: 12px; }
+.swatch .label { position: absolute; bottom: 6px; left: 8px; right: 8px; color: white; font-size: 11px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.5); letter-spacing: 0.01em; }
+
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; font-size: 13px; font-weight: 500; box-shadow: 0 12px 32px var(--accent-glow-1), 0 4px 16px rgba(0,0,0,0.3); z-index: 200; display: flex; align-items: center; gap: 8px; animation: toastIn 0.4s var(--ease); }
+.toast svg { width: 14px; height: 14px; }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+.tweaks { position: fixed; bottom: 28px; right: 88px; width: 300px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-xl); box-shadow: var(--shadow-pop); padding: 16px; z-index: 50; animation: popIn 0.35s var(--ease); }
+.tweaks-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.tweaks-head h4 { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 14px; color: var(--text-primary); letter-spacing: -0.005em; }
+.tweaks-row { margin-bottom: 12px; }
+.tweaks-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); font-weight: 600; margin-bottom: 6px; }
+.tweaks-options { display: flex; gap: 4px; padding: 3px; border-radius: var(--r); background: var(--bg-badge); border: 1px solid var(--border); }
+.tweak-btn { flex: 1; padding: 6px 8px; border-radius: 6px; font-size: 11.5px; color: var(--text-secondary); font-weight: 500; transition: all var(--dur) var(--ease-std); }
+.tweak-btn:hover { color: var(--text-primary); }
+.tweak-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; box-shadow: 0 2px 6px var(--accent-glow-1); }
+
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+  .hero-title { font-size: 28px; }
+  .hero { padding: 36px 0 20px; }
+  .search-input { height: 50px; padding: 0 90px 0 44px; font-size: 15px; }
+  .search-shortcut .kbd { display: none; }
+  .stats { flex-direction: column; }
+  .stat { width: 100%; justify-content: space-between; }
+  .grid { grid-template-columns: 1fr; }
+  .swatch-grid { grid-template-columns: repeat(3, 1fr); }
+  .tweaks { right: 16px; left: 16px; width: auto; bottom: 84px; }
+  .to-top { bottom: 16px; right: 16px; }
+}
+
+@media print {
+  .header, .hero, .stats, .source-panel, .section-spot, .section-fav, .section-recent,
+  .dup-banner, .tabs, .to-top, .toast, .ambient, .modal-backdrop, .tweaks, .footer,
+  .star-btn, .expand-hint, .result-count { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .card, .card * { color: black !important; background: white !important; border-color: #ddd !important; box-shadow: none !important; animation: none !important; transform: none !important; }
+  .card-triggers { max-height: none !important; padding-top: 8px !important; }
+  .card-desc { -webkit-line-clamp: unset !important; overflow: visible !important; }
+  .print-header { display: block !important; }
+  .grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .card { page-break-inside: avoid; }
+  .chip { background: #f3f4f8 !important; border-color: #ddd !important; color: #111 !important; }
+}
+.print-header { display: none; text-align: center; font-family: var(--f-display); font-weight: 700; font-size: 24px; margin: 20px 0; }
+.flex-row { display: flex; align-items: center; gap: 8px; }
+.lucide { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div id="print-header" class="print-header">Skills Dashboard</div>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+const Icon = ({ name, size = 16, ...rest }) => {
+  const paths = {
+    zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+    search: <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
+    x: <><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
+    sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>,
+    moon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>,
+    palette: <><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></>,
+    printer: <><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></>,
+    star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>,
+    starFilled: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/>,
+    chevronDown: <polyline points="6 9 12 15 18 9"/>,
+    chevronUp: <polyline points="18 15 12 9 6 15"/>,
+    chevronRight: <polyline points="9 18 15 12 9 6"/>,
+    arrowUp: <><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></>,
+    check: <polyline points="20 6 9 17 4 12"/>,
+    refresh: <><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></>,
+    sparkles: <><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M19 13l.9 2.7 2.6.9-2.6.9-.9 2.7-.9-2.7-2.6-.9 2.6-.9.9-2.7z"/><path d="M5 5l.7 1.8L7.5 7.5l-1.8.7L5 10l-.7-1.8-1.8-.7 1.8-.7L5 5z"/></>,
+    alertTriangle: <><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></>,
+    filter: <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>,
+    grid: <><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></>,
+    folder: <><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></>,
+    list: <><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></>,
+    clock: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+    tag: <><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></>,
+    layers: <><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></>,
+    sliders: <><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></>,
+    trash: <><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></>,
+    history: <><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></>,
+    pin: <><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></>,
+    globe: <><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>,
+    book: <><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></>,
+    command: <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>,
+  };
+  return (
+    <svg className="lucide" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...rest}>
+      {paths[name] || null}
+    </svg>
+  );
+};
+
+const COLOR_THEMES = [
+  { id: 'blue',    name: { tr: 'Elektrik Mavi', en: 'Electric Blue' }, primary: '#3D7AF5', light: '#7ba5f7', dark: '#2D6AE5', heroMid: '#5b94f7', orbRgb: '61,122,245' },
+  { id: 'teal',    name: { tr: 'Gök Mavisi',    en: 'Sky' },           primary: '#0ea5e9', light: '#7dd3fc', dark: '#0284c7', heroMid: '#38bdf8', orbRgb: '14,165,233' },
+  { id: 'emerald', name: { tr: 'Zümrüt',        en: 'Emerald' },       primary: '#10b981', light: '#6ee7b7', dark: '#059669', heroMid: '#34d399', orbRgb: '16,185,129' },
+  { id: 'orange',  name: { tr: 'Gün Batımı',    en: 'Sunset' },        primary: '#f97316', light: '#fdba74', dark: '#ea580c', heroMid: '#fb923c', orbRgb: '249,115,22' },
+  { id: 'rose',    name: { tr: 'Gül',           en: 'Rose' },          primary: '#f43f5e', light: '#fda4af', dark: '#e11d48', heroMid: '#fb7185', orbRgb: '244,63,94' },
+  { id: 'amber',   name: { tr: 'Altın',         en: 'Amber' },         primary: '#f59e0b', light: '#fcd34d', dark: '#d97706', heroMid: '#fbbf24', orbRgb: '245,158,11' },
+  { id: 'violet',  name: { tr: 'Mor',           en: 'Violet' },        primary: '#8b5cf6', light: '#c4b5fd', dark: '#7c3aed', heroMid: '#a78bfa', orbRgb: '139,92,246' },
+  { id: 'cyan',    name: { tr: 'Buz Mavisi',    en: 'Cyan Ice' },      primary: '#06b6d4', light: '#67e8f9', dark: '#0891b2', heroMid: '#22d3ee', orbRgb: '6,182,212' },
+];
+
+function hexToRgba(hex, a) {
+  const v = hex.replace('#','');
+  const r = parseInt(v.slice(0,2),16), g = parseInt(v.slice(2,4),16), b = parseInt(v.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function applyColorTheme(themeId) {
+  const t = COLOR_THEMES.find(x => x.id === themeId) || COLOR_THEMES[0];
+  const root = document.documentElement;
+  root.style.setProperty('--accent', t.primary);
+  root.style.setProperty('--accent-light', t.light);
+  root.style.setProperty('--accent-dark', t.dark);
+  root.style.setProperty('--hero-mid', t.heroMid);
+  root.style.setProperty('--orb-rgb', t.orbRgb);
+  root.style.setProperty('--accent-glow-1', hexToRgba(t.primary, 0.35));
+  root.style.setProperty('--accent-glow-2', hexToRgba(t.primary, 0.18));
+  root.style.setProperty('--accent-10', hexToRgba(t.primary, 0.10));
+  root.style.setProperty('--accent-20', hexToRgba(t.primary, 0.22));
+  root.style.setProperty('--accent-30', hexToRgba(t.primary, 0.35));
+}
+
+const SOURCES = {
+  'custom':       { tr: 'Özel',              en: 'Custom',            color: '#3b82f6' },
+  'cowork-ess':   { tr: 'Cowork Essentials', en: 'Cowork Essentials', color: '#00b894' },
+  'cowork-os':    { tr: 'Cowork OS',         en: 'Cowork OS',         color: '#e17055' },
+  'legal':        { tr: 'Hukuk',             en: 'Legal',             color: '#74b9ff' },
+  'marketing':    { tr: 'Pazarlama',         en: 'Marketing',         color: '#fd79a8' },
+  'sales':        { tr: 'Satış',             en: 'Sales',             color: '#55efc4' },
+  'design':       { tr: 'Tasarım',           en: 'Design',            color: '#a29bfe' },
+  'voice':        { tr: 'Marka Sesi',        en: 'Brand Voice',       color: '#ffeaa7' },
+  'productivity': { tr: 'Verimlilik',        en: 'Productivity',      color: '#81ecec' },
+  'plugin':       { tr: 'Eklenti Yönetimi',  en: 'Plugin Mgmt',       color: '#dfe6e9' },
+  'user':         { tr: 'Kullanıcı',         en: 'User Added',        color: '#ff9ff3' },
+};
+
+const CATEGORIES = [
+  { id: 'writing',  tr: 'Yazı & İletişim',  en: 'Writing & Comms' },
+  { id: 'research', tr: 'Araştırma',         en: 'Research' },
+  { id: 'analysis', tr: 'Analiz & Strateji', en: 'Analysis & Strategy' },
+  { id: 'design',   tr: 'Tasarım & Ürün',    en: 'Design & Product' },
+  { id: 'ops',      tr: 'Operasyon',          en: 'Operations' },
+  { id: 'data',     tr: 'Veri & Raporlama',  en: 'Data & Reporting' },
+  { id: 'sales',    tr: 'Satış & Müşteri',   en: 'Sales & Customer' },
+  { id: 'meta',     tr: 'Meta & Sistem',      en: 'Meta & System' },
+];
+
+const BUILTIN_SKILLS = [
+  { id: 'morning-brief',
+    name: { tr: 'Sabah Brifingi', en: 'Morning Briefing' },
+    desc: { tr: 'Gün başında takvim, e-posta ve bekleyen kararları özetleyen kişisel bir rapor üretir. Öncelikleri sıralar ve ilk 3 aksiyonu önerir.', en: 'Generates a personal start-of-day report summarizing calendar, email and pending decisions. Ranks priorities and suggests the top 3 actions.' },
+    triggers: ['brief me', 'günaydın', 'daily brief', 'sabah özeti', "what's on today"],
+    source: 'cowork-ess', category: 'ops',
+    bestFor: { tr: 'Günün ilk 10 dakikasında odak bulmak', en: 'Finding focus in the first 10 minutes of the day' } },
+  { id: 'morning-brief-v2',
+    name: { tr: 'Günlük Özet (Cowork OS)', en: 'Daily Digest (Cowork OS)' },
+    desc: { tr: 'Cowork OS entegrasyonu üzerinden takım kanallarını ve proje durumlarını tarayıp yönetici odaklı özet çıkarır.', en: 'Scans team channels and project states via Cowork OS integration to produce an executive-oriented digest.' },
+    triggers: ['daily digest', 'team summary', 'günlük durum', 'project digest'],
+    source: 'cowork-os', category: 'ops',
+    bestFor: { tr: 'Takım lideri için pazartesi durum taraması', en: 'Monday status sweep for a team lead' } },
+  { id: 'proposal-writer',
+    name: { tr: 'Teklif Yazarı', en: 'Proposal Writer' },
+    desc: { tr: "Müşteri brief'inden yapılandırılmış teklif dokümanı üretir — kapsam, zaman çizelgesi, fiyat ve varsayımlar.", en: 'Turns a client brief into a structured proposal — scope, timeline, pricing and assumptions.' },
+    triggers: ['write proposal', 'teklif hazırla', 'SOW', 'scope of work'],
+    source: 'sales', category: 'sales',
+    bestFor: { tr: 'İlk kontakttan sonra 24 saat içinde yanıt vermek', en: 'Following up within 24h of first contact' } },
+  { id: 'rfp-responder',
+    name: { tr: 'RFP Yanıtı', en: 'RFP Responder' },
+    desc: { tr: 'Gelen RFP dosyasını parçalar, firma belgelerinden cevap çeker, eksik noktaları soru olarak işaretler.', en: "Decomposes an incoming RFP, drafts answers from company documents, flags gaps as questions." },
+    triggers: ['respond to RFP', 'RFP yanıtı', 'tender response'],
+    source: 'sales', category: 'sales',
+    bestFor: { tr: 'Kurumsal ihale başvurularında ilk taslak', en: 'First draft for enterprise tender submissions' } },
+  { id: 'contract-review',
+    name: { tr: 'Sözleşme Gözden Geçirici', en: 'Contract Reviewer' },
+    desc: { tr: 'NDA, MSA ve SaaS sözleşmelerinde risk maddelerini işaretler, müzakere noktalarını önerir.', en: 'Flags risk clauses in NDAs, MSAs and SaaS contracts, proposes negotiation points.' },
+    triggers: ['review contract', 'sözleşme incele', 'redline', 'NDA check'],
+    source: 'legal', category: 'analysis',
+    bestFor: { tr: 'İmzalamadan önce 20 dakikalık güvenlik kontrolü', en: 'A 20-minute safety check before signing' } },
+  { id: 'market-research',
+    name: { tr: 'Pazar Araştırması', en: 'Market Research' },
+    desc: { tr: 'Sektör, rakip ve fiyatlandırma bilgisini derleyip kaynaklarıyla birlikte yapılandırılmış bir rapor üretir.', en: 'Compiles industry, competitor and pricing intelligence with citations into a structured report.' },
+    triggers: ['research market', 'pazar araştırması', 'competitive landscape', 'rekabet analizi'],
+    source: 'marketing', category: 'research',
+    bestFor: { tr: 'Yeni bir dikey pazara girme kararını desteklemek', en: 'Supporting a decision to enter a new vertical' } },
+  { id: 'competitor-teardown',
+    name: { tr: 'Rakip Analizi', en: 'Competitor Teardown' },
+    desc: { tr: "Belirli bir rakibin fiyatlandırma, mesajlaşma ve ürün konumlandırmasını inceler; farklılaşma fırsatlarını sıralar.", en: "Deep-dives a specific competitor's pricing, messaging and product positioning; lists differentiation plays." },
+    triggers: ['teardown', 'rakip analiz', 'competitor analysis', 'compare with'],
+    source: 'marketing', category: 'analysis',
+    bestFor: { tr: 'Bir rakibe karşı pitch hazırlamak', en: 'Preparing a pitch against a specific competitor' } },
+  { id: 'voice-keeper',
+    name: { tr: 'Marka Sesi Bekçisi', en: 'Brand Voice Keeper' },
+    desc: { tr: "Yazılmış herhangi bir metni şirketin tanımlı ses/ton kılavuzuna göre kontrol eder, alternatif versiyonlar önerir.", en: "Checks any written copy against the company's defined voice/tone guide and suggests alternatives." },
+    triggers: ['check voice', 'ton kontrol', 'on-brand?', 'rewrite on-brand'],
+    source: 'voice', category: 'writing',
+    bestFor: { tr: 'Dış yayınlamadan önce son metin gözden geçirmesi', en: 'Final copy review before external publication' } },
+  { id: 'email-triage',
+    name: { tr: 'E-posta Filtrele', en: 'Email Triage' },
+    desc: { tr: 'Gelen kutusunu tarar; her e-postaya "yanıtla / beklet / arşivle" etiketi verir ve kısa yanıt taslakları hazırlar.', en: 'Scans the inbox; labels each message reply / wait / archive and drafts short responses.' },
+    triggers: ['triage inbox', 'email triage', 'e-posta filtrele', 'zero inbox'],
+    source: 'productivity', category: 'ops',
+    bestFor: { tr: '80+ e-postalı gelen kutusunu 15 dakikada temizlemek', en: 'Clearing an 80+ email inbox in 15 minutes' } },
+  { id: 'design-critique',
+    name: { tr: 'Tasarım Kritiği', en: 'Design Critique' },
+    desc: { tr: 'Bir ekran görüntüsü veya Figma bağlantısı üzerinde hiyerarşi, kontrast, kopyalama ve erişilebilirlik notları çıkarır.', en: 'Produces hierarchy, contrast, copy and accessibility notes on a screenshot or Figma link.' },
+    triggers: ['critique design', 'design review', 'tasarım değerlendir', 'UX feedback'],
+    source: 'design', category: 'design',
+    bestFor: { tr: 'Paylaşım öncesi ikinci bir çift göz almak', en: 'Getting a second pair of eyes before sharing' } },
+  { id: 'pricing-model',
+    name: { tr: 'Fiyatlandırma Modeli', en: 'Pricing Model' },
+    desc: { tr: 'Değer, maliyet ve rakip kıyaslaması üzerinden kademeli fiyatlandırma önerir; duyarlılık analizini çalıştırır.', en: 'Proposes tiered pricing based on value, cost and competitive benchmarks; runs sensitivity analysis.' },
+    triggers: ['pricing', 'fiyat modeli', 'price this', 'value-based pricing'],
+    source: 'custom', category: 'analysis',
+    bestFor: { tr: 'Yeni SKU lansmanında ilk fiyat iskeleti', en: 'Initial price scaffold for a new SKU launch' } },
+  { id: 'kpi-dash',
+    name: { tr: 'KPI Panosu', en: 'KPI Dashboard' },
+    desc: { tr: 'CSV veya tablo verisini temiz bir özet panosuna çevirir — trendleri, aykırı değerleri ve uyarıları işaretler.', en: 'Turns CSV or table data into a clean summary dashboard — surfaces trends, outliers and alerts.' },
+    triggers: ['build dashboard', 'KPI pano', 'summarize metrics', 'veri özetle'],
+    source: 'custom', category: 'data',
+    bestFor: { tr: 'Haftalık yönetim toplantısı hazırlığı', en: 'Prepping for the weekly leadership meeting' } },
+  { id: 'customer-voice',
+    name: { tr: 'Müşteri Sesi', en: 'Customer Voice' },
+    desc: { tr: "Destek ticket'larını, incelemeleri ve anket yanıtlarını temalar halinde kümeleyip öncelikli sorunları sıralar.", en: 'Clusters support tickets, reviews and survey responses into themes and ranks priority issues.' },
+    triggers: ['customer voice', 'müşteri sesi', 'feedback themes', 'ticket patterns'],
+    source: 'productivity', category: 'research',
+    bestFor: { tr: 'Çeyreklik ürün planlamasına girdi üretmek', en: 'Feeding inputs into quarterly product planning' } },
+  { id: 'meeting-notes',
+    name: { tr: 'Toplantı Özeti', en: 'Meeting Notes' },
+    desc: { tr: 'Ses kaydından veya transkriptten kararlar, aksiyon maddeleri ve sahiplikler içeren yapılandırılmış not üretir.', en: 'Produces structured notes — decisions, action items and owners — from audio or a transcript.' },
+    triggers: ['summarize meeting', 'toplantı özet', 'action items', 'meeting notes'],
+    source: 'productivity', category: 'ops',
+    bestFor: { tr: '60 dakikalık toplantıyı 300 kelimeye indirmek', en: 'Condensing a 60-minute meeting into 300 words' } },
+  { id: 'skill-curator',
+    name: { tr: 'Skill Küratörü', en: 'Skill Curator' },
+    desc: { tr: "Tüm mevcut skill'leri tarar, çakışanları ve düşük kullanımlıları tespit eder; arşivleme önerir.", en: 'Scans all installed skills, detects overlaps and low-usage ones; suggests archiving candidates.' },
+    triggers: ['audit skills', 'skill temizle', 'skill overlap', 'spring clean'],
+    source: 'plugin', category: 'meta',
+    bestFor: { tr: 'Ayda bir skill hijyeni yapmak', en: 'Monthly skill hygiene' } },
+];
+
+const I18N = {
+  tr: {
+    brandTitle: 'Skills Dashboard', heroEyebrow: 'Tüm araçlar tek panoda',
+    heroTitle1: 'Tüm araç setin,', heroTitle2: 'tek panoda',
+    heroSub: "Yüklü tüm Claude skill'lerini keşfet, filtrele ve düzenle. Çakışanları bul, favorilerini sabitle, tetikleyici ifadelerle birlikte tetik seslerinden çağır.",
+    searchPlaceholder: 'Skill ara — isim, açıklama veya tetikleyici...',
+    smart: 'Akıllı Arama', byName: 'İsme Göre', byTrigger: 'Tetikleyici',
+    showing: 'Gösteriliyor', of: 'arasından', skills: 'skill',
+    total: 'toplam', categories: 'kategori', sources: 'kaynak', duplicates: 'çakışan grup', details: 'Detaylar',
+    spotKicker: 'Bunu biliyor muydun?', spotBestFor: 'En iyi:', bestFor: 'En iyi:',
+    recent: 'Son görüntülenen', favorites: 'Sabitlenenler', clear: 'Temizle',
+    dupBanner: 'Çakışan skill grupları bulundu', all: 'Tümü', backTop: 'Başa dön',
+    footerLine: 'Skills Dashboard', tweaksTitle: 'İnce Ayarlar',
+    layout: 'Yerleşim', lGrid: 'Izgara', lList: 'Liste', lMag: 'Dergi',
+    density: 'Yoğunluk', dComfy: 'Ferah', dCompact: 'Sıkı',
+    orbsLabel: 'Arka plan', orbsOn: 'Orb', orbsOff: 'Sade',
+    language: 'Dil', tr: 'TR', en: 'EN',
+    triggerPhrases: 'Tetikleyici İfadeler', clickExpand: 'Tıkla, tetikleyicileri gör',
+    chooseColor: 'Vurgu rengini seç', themeCopied: 'Renk uygulandı',
+    langSet: 'Dil değişti', cleared: 'Temizlendi', print: 'Yazdır',
+    loadSkills: 'Skill klasörü yükle',
+    reloadSkills: '.claude/skills klasöründen yeniden yükle',
+  },
+  en: {
+    brandTitle: 'Skills Dashboard', heroEyebrow: 'Your entire toolkit in one place',
+    heroTitle1: 'Your Entire Toolkit,', heroTitle2: 'One Dashboard',
+    heroSub: 'Discover, filter and curate every installed Claude skill. Spot overlaps, pin favorites, summon them by the trigger phrases shown on every card.',
+    searchPlaceholder: 'Search skills — name, description or trigger...',
+    smart: 'Smart Search', byName: 'By Name', byTrigger: 'By Trigger',
+    showing: 'Showing', of: 'of', skills: 'skills',
+    total: 'total', categories: 'categories', sources: 'sources', duplicates: 'duplicate groups', details: 'Details',
+    spotKicker: 'Did you know you have this?', spotBestFor: 'Best for:', bestFor: 'Best for:',
+    recent: 'Recently viewed', favorites: 'Pinned favorites', clear: 'Clear',
+    dupBanner: 'Overlapping skill groups detected', all: 'All', backTop: 'Back to top',
+    footerLine: 'Skills Dashboard', tweaksTitle: 'Tweaks',
+    layout: 'Layout', lGrid: 'Grid', lList: 'List', lMag: 'Magazine',
+    density: 'Density', dComfy: 'Comfy', dCompact: 'Compact',
+    orbsLabel: 'Background', orbsOn: 'Orbs', orbsOff: 'Clean',
+    language: 'Language', tr: 'TR', en: 'EN',
+    triggerPhrases: 'Trigger Phrases', clickExpand: 'Click to reveal triggers',
+    chooseColor: 'Choose accent color', themeCopied: 'Theme applied',
+    langSet: 'Language updated', cleared: 'Cleared', print: 'Print',
+    loadSkills: 'Load skills folder',
+    reloadSkills: 'Reload from .claude/skills folder',
+  },
+};
+
+const LS = {
+  get(k, fb) { try { const v = localStorage.getItem(k); return v == null ? fb : JSON.parse(v); } catch { return fb; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  getRaw(k, fb) { try { const v = localStorage.getItem(k); return v == null ? fb : v; } catch { return fb; } },
+  setRaw(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+
+const TWEAK_DEFAULTS = { layout: 'grid', density: 'comfy', orbs: true, lang: 'tr' };
+
+// IndexedDB — persists the directory handle across page reloads
+const IDB = {
+  _p: null,
+  _open() {
+    if (!this._p) this._p = new Promise((res, rej) => {
+      const r = indexedDB.open('skills-dash-v1', 1);
+      r.onupgradeneeded = e => e.target.result.createObjectStore('data');
+      r.onsuccess = e => res(e.target.result);
+      r.onerror = () => rej(r.error);
+    });
+    return this._p;
+  },
+  async get(key) {
+    const db = await this._open();
+    return new Promise((res, rej) => {
+      const r = db.transaction('data','readonly').objectStore('data').get(key);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  },
+  async set(key, val) {
+    const db = await this._open();
+    return new Promise((res, rej) => {
+      const r = db.transaction('data','readwrite').objectStore('data').put(val, key);
+      r.onsuccess = () => res();
+      r.onerror = () => rej(r.error);
+    });
+  },
+};
+
+// Recursively finds all SKILL.md files under a directory handle
+async function readSkillFiles(dirHandle) {
+  const results = [];
+  async function scan(handle, relPath) {
+    for await (const [name, entry] of handle.entries()) {
+      const p = relPath ? relPath + '/' + name : name;
+      if (entry.kind === 'directory') await scan(entry, p);
+      else if (name.toLowerCase() === 'skill.md') {
+        const file = await entry.getFile();
+        results.push({ text: await file.text(), path: p });
+      }
+    }
+  }
+  await scan(dirHandle, '');
+  return results;
+}
+
+function smartSearch(skills, query, lang) {
+  if (!query.trim()) return skills;
+  const q = query.toLowerCase().trim();
+  const words = q.split(/\s+/).filter(Boolean);
+  const scored = skills.map(s => {
+    const name = (s.name[lang] || s.name.en).toLowerCase();
+    const desc = (s.desc[lang] || s.desc.en).toLowerCase();
+    const best = (s.bestFor[lang] || s.bestFor.en).toLowerCase();
+    const trigs = s.triggers.map(t => t.toLowerCase());
+    const cat = (CATEGORIES.find(c => c.id === s.category)?.[lang] || '').toLowerCase();
+    let score = 0;
+    if (name.includes(q)) score += 10;
+    if (best.includes(q)) score += 8;
+    if (trigs.some(t => t.includes(q))) score += 6;
+    if (desc.includes(q)) score += 4;
+    if (cat.includes(q)) score += 3;
+    for (const w of words) {
+      if (name.includes(w)) score += 2;
+      if (desc.includes(w)) score += 1;
+      if (trigs.some(t => t.includes(w))) score += 1;
+      if (best.includes(w)) score += 1;
+    }
+    return { s, score };
+  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+  return scored.map(x => x.s);
+}
+function nameSearch(skills, query, lang) {
+  if (!query.trim()) return skills;
+  const q = query.toLowerCase().trim();
+  return skills.filter(s => (s.name[lang] || s.name.en).toLowerCase().includes(q));
+}
+function triggerSearch(skills, query) {
+  if (!query.trim()) return skills;
+  const q = query.toLowerCase().trim();
+  return skills.filter(s => s.triggers.some(t => t.toLowerCase().includes(q)));
+}
+
+const { useState, useEffect, useMemo, useRef } = React;
+
+function SkillCard({ skill, lang, fav, onToggleFav, expanded, onClick, index }) {
+  const t = I18N[lang];
+  const src = SOURCES[skill.source] || {};
+  const cat = CATEGORIES.find(c => c.id === skill.category);
+  const delay = Math.min(index * 30, 300);
+  const srcStyle = {
+    '--src-color': src.color,
+    '--src-bg': hexToRgba(src.color || '#888', 0.10),
+    '--src-border': hexToRgba(src.color || '#888', 0.25),
+  };
+  return (
+    <div className={`card ${expanded ? 'expanded' : ''}`} style={{ animationDelay: `${delay}ms` }} onClick={onClick}>
+      <div className="card-head">
+        <div className="card-title-wrap">
+          <h3 className="card-title">{skill.name[lang] || skill.name.en}</h3>
+          <p className="card-desc">{skill.desc[lang] || skill.desc.en}</p>
+        </div>
+        <button className={`star-btn ${fav ? 'on' : ''}`} onClick={e => { e.stopPropagation(); onToggleFav(skill.id); }} title="Favorite">
+          <Icon name={fav ? 'starFilled' : 'star'} />
+        </button>
+      </div>
+      <div className="card-badges">
+        <span className="badge src" style={srcStyle}>
+          <span className="dot" />
+          {src[lang] || src.en}
+        </span>
+        {cat && <span className="badge"><Icon name="tag" size={11}/> {cat[lang] || cat.en}</span>}
+      </div>
+      <div className="best-for">
+        <span className="best-for-label">{t.bestFor}</span>
+        {skill.bestFor[lang] || skill.bestFor.en}
+      </div>
+      {!expanded && (
+        <div className="expand-hint">
+          <Icon name="chevronDown" size={10} /> {t.clickExpand}
+        </div>
+      )}
+      <div className="card-triggers">
+        <div className="triggers-label">
+          <Icon name="command" size={11}/> {t.triggerPhrases}
+        </div>
+        <div className="triggers-chips">
+          {skill.triggers.map((tg, i) => <span key={i} className="chip">{tg}</span>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TweaksPanel({ tweaks, setTweaks, lang, setLang, onClose }) {
+  const t = I18N[lang];
+  const opt = (key, val, label) => (
+    <button className={`tweak-btn ${tweaks[key] === val ? 'active' : ''}`} onClick={() => setTweaks(prev => ({ ...prev, [key]: val }))}>{label}</button>
+  );
+  return (
+    <div className="tweaks">
+      <div className="tweaks-head">
+        <Icon name="sliders" size={14}/>
+        <h4>{t.tweaksTitle}</h4>
+        <button className="tweaks-close" onClick={onClose}><Icon name="x" size={12}/></button>
+      </div>
+      <div className="tweaks-row">
+        <div className="tweaks-label">{t.layout}</div>
+        <div className="tweaks-options">{opt('layout','grid',t.lGrid)}{opt('layout','list',t.lList)}{opt('layout','magazine',t.lMag)}</div>
+      </div>
+      <div className="tweaks-row">
+        <div className="tweaks-label">{t.density}</div>
+        <div className="tweaks-options">{opt('density','comfy',t.dComfy)}{opt('density','compact',t.dCompact)}</div>
+      </div>
+      <div className="tweaks-row">
+        <div className="tweaks-label">{t.orbsLabel}</div>
+        <div className="tweaks-options">{opt('orbs',true,t.orbsOn)}{opt('orbs',false,t.orbsOff)}</div>
+      </div>
+      <div className="tweaks-row" style={{marginBottom:0}}>
+        <div className="tweaks-label">{t.language}</div>
+        <div className="tweaks-options">
+          <button className={`tweak-btn ${lang==='tr'?'active':''}`} onClick={()=>setLang('tr')}>{t.tr}</button>
+          <button className={`tweak-btn ${lang==='en'?'active':''}`} onClick={()=>setLang('en')}>{t.en}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ColorModal({ open, onClose, current, onPick, lang }) {
+  const t = I18N[lang];
+  useEffect(() => {
+    if (!open) return;
+    const onKey = e => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-head">
+          <Icon name="palette" size={18}/>
+          <div className="modal-title" style={{marginLeft:10}}>{t.chooseColor}</div>
+          <button className="modal-close" onClick={onClose}><Icon name="x" size={14}/></button>
+        </div>
+        <div className="swatch-grid">
+          {COLOR_THEMES.map(th => (
+            <button key={th.id} className={`swatch ${current===th.id?'active':''}`}
+              style={{background:`linear-gradient(135deg,${th.primary},${th.light})`}}
+              onClick={()=>onPick(th.id)}>
+              <span className="check"><Icon name="check" size={12}/></span>
+              <span className="label">{th.name[lang]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [color, setColor] = useState(() => LS.getRaw('sk_color','blue'));
+  const [mode, setMode] = useState(() => {
+    const saved = LS.getRaw('sk_mode', null);
+    if (saved) return saved;
+    return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  });
+  const [lang, setLangState] = useState(() => LS.getRaw('sk_lang', TWEAK_DEFAULTS.lang));
+  const t = I18N[lang];
+
+  const [query, setQuery] = useState('');
+  const [searchMode, setSearchMode] = useState('smart');
+  const [activeCat, setActiveCat] = useState('all');
+  const [favs, setFavs] = useState(() => LS.get('sk_favs', []));
+  const [recent, setRecent] = useState(() => LS.get('sk_recent', []));
+  const [collapsedCats, setCollapsedCats] = useState(() => LS.get('sk_collapsed', {}));
+  const [recentClosed, setRecentClosed] = useState(() => LS.getRaw('sk_recent_collapsed','1') === '1');
+  const [dupOpen, setDupOpen] = useState(false);
+  const [srcOpen, setSrcOpen] = useState(false);
+  const [spotlightIdx, setSpotlightIdx] = useState(0);
+  const [expandedId, setExpandedId] = useState(null);
+  const [colorModal, setColorModal] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [showTop, setShowTop] = useState(false);
+  const [tweaks, setTweaks] = useState(() => ({ ...TWEAK_DEFAULTS, ...LS.get('sk_tweaks',{}) }));
+  const [tweaksOpen, setTweaksOpen] = useState(() => LS.getRaw('sk_tweaks_open','0') === '1');
+  const [customSkills, setCustomSkills] = useState(() => LS.get('sk_custom', []));
+  const [isReloading, setIsReloading] = useState(false);
+  const [dirHandle, setDirHandle] = useState(null);
+  const folderInputRef = useRef(null);
+  const searchRef = useRef(null);
+
+  // Restore saved directory handle from IndexedDB on mount
+  useEffect(() => {
+    IDB.get('dirHandle').then(h => { if (h) setDirHandle(h); }).catch(() => {});
+  }, []);
+
+  const allSkills = useMemo(() => customSkills.length > 0 ? customSkills : BUILTIN_SKILLS, [customSkills]);
+
+  // Persist effects
+  useEffect(() => { document.documentElement.setAttribute('data-theme', mode); LS.setRaw('sk_mode', mode); }, [mode]);
+  useEffect(() => { applyColorTheme(color); LS.setRaw('sk_color', color); }, [color]);
+  useEffect(() => { LS.set('sk_favs', favs); }, [favs]);
+  useEffect(() => { LS.set('sk_recent', recent); }, [recent]);
+  useEffect(() => { LS.set('sk_collapsed', collapsedCats); }, [collapsedCats]);
+  useEffect(() => { LS.set('sk_tweaks', tweaks); }, [tweaks]);
+  useEffect(() => { LS.setRaw('sk_tweaks_open', tweaksOpen ? '1' : '0'); }, [tweaksOpen]);
+  useEffect(() => { LS.setRaw('sk_lang', lang); }, [lang]);
+  useEffect(() => { LS.setRaw('sk_recent_collapsed', recentClosed ? '1' : '0'); }, [recentClosed]);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onKey = e => {
+      if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault(); searchRef.current?.focus();
+      } else if (e.key === 'Escape') {
+        if (document.activeElement === searchRef.current) searchRef.current.blur();
+        setColorModal(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const id = setTimeout(() => setToast(null), 2400);
+    return () => clearTimeout(id);
+  }, [toast]);
+
+  const dupGroups = useMemo(() => {
+    const groups = [], used = new Set();
+    for (let i = 0; i < allSkills.length; i++) {
+      if (used.has(allSkills[i].id)) continue;
+      const a = allSkills[i];
+      const aTrigs = new Set(a.triggers.map(x => x.toLowerCase().trim()));
+      const matches = [a];
+      for (let j = i + 1; j < allSkills.length; j++) {
+        const b = allSkills[j];
+        if (used.has(b.id)) continue;
+        const bTrigs = b.triggers.map(x => x.toLowerCase().trim());
+        const overlap = bTrigs.filter(x => aTrigs.has(x)).length;
+        const aName = (a.name.en||'').toLowerCase().replace(/[-_]/g,' ');
+        const bName = (b.name.en||'').toLowerCase().replace(/[-_]/g,' ');
+        const nameWords = aName.split(' ').filter(w => w.length > 3);
+        const nameOverlap = nameWords.filter(w => bName.includes(w)).length;
+        if (overlap >= 1 || nameOverlap >= 2) { matches.push(b); used.add(b.id); }
+      }
+      if (matches.length > 1) {
+        used.add(a.id);
+        const title = (a.name.en||a.name.tr||'').slice(0,40) + ' overlap';
+        groups.push({ id: 'dup-'+a.id, title: { tr: title, en: title }, ids: matches.map(s => s.id) });
+      }
+    }
+    return groups.slice(0, 8);
+  }, [allSkills]);
+
+  const filtered = useMemo(() => {
+    let list = allSkills;
+    if (activeCat !== 'all') list = list.filter(s => s.category === activeCat);
+    if (searchMode === 'smart') list = smartSearch(list, query, lang);
+    else if (searchMode === 'name') list = nameSearch(list, query, lang);
+    else list = triggerSearch(list, query);
+    return list;
+  }, [allSkills, query, searchMode, activeCat, lang]);
+
+  const catCounts = useMemo(() => {
+    const counts = { all: allSkills.length };
+    for (const c of CATEGORIES) counts[c.id] = 0;
+    for (const s of allSkills) counts[s.category] = (counts[s.category] || 0) + 1;
+    return counts;
+  }, [allSkills]);
+
+  const sourceBreakdown = useMemo(() => {
+    const counts = {};
+    for (const s of allSkills) counts[s.source] = (counts[s.source] || 0) + 1;
+    return Object.entries(counts).map(([id, cnt]) => ({ id, cnt, src: SOURCES[id] || {} })).sort((a,b) => b.cnt - a.cnt);
+  }, [allSkills]);
+
+  const favoriteSkills = useMemo(() => favs.map(id => allSkills.find(s => s.id === id)).filter(Boolean), [favs, allSkills]);
+  const recentSkills = useMemo(() => recent.map(id => allSkills.find(s => s.id === id)).filter(Boolean), [recent, allSkills]);
+  const spotlight = allSkills[spotlightIdx % allSkills.length] || allSkills[0];
+
+  const toggleFav = id => setFavs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  const onCardClick = id => {
+    setExpandedId(cur => cur === id ? null : id);
+    setRecent(prev => [id, ...prev.filter(x => x !== id)].slice(0, 6));
+  };
+  const toggleMode = () => {
+    setMode(m => m === 'dark' ? 'light' : 'dark');
+  };
+  const pickColor = id => { setColor(id); setToast({ msg: t.themeCopied, icon: 'check' }); setColorModal(false); };
+  const toggleCat = id => setCollapsedCats(prev => ({ ...prev, [id]: !prev[id] }));
+  const rollSpotlight = () => {
+    let i = Math.floor(Math.random() * allSkills.length);
+    if (i === spotlightIdx % allSkills.length && allSkills.length > 1) i = (i + 1) % allSkills.length;
+    setSpotlightIdx(i);
+  };
+  const clearRecents = () => { setRecent([]); setToast({ msg: t.cleared, icon: 'check' }); };
+  const setLang = l => { setLangState(l); setToast({ msg: t.langSet, icon: 'check' }); };
+
+  const detectCategory = desc => {
+    const d = desc.toLowerCase();
+    if (/code review|backend|frontend|api|deploy|refactor|debug|test|typescript|javascript|python|git|pull request/.test(d)) return 'design';
+    if (/research|analyz|report|market|survey|compet/.test(d)) return 'research';
+    if (/email|meeting|brief|daily|summary|schedule|calendar|triage|morning|standup/.test(d)) return 'ops';
+    if (/write|copy|blog|content|tone|voice|document|proposal|contract|draft/.test(d)) return 'writing';
+    if (/sales|crm|lead|prospect|pitch|deal|customer|client|revenue/.test(d)) return 'sales';
+    if (/data|csv|kpi|metric|dashboard|chart|analytic|insight/.test(d)) return 'data';
+    if (/pricing|strateg|financ|budget|forecast|model|business|analys/.test(d)) return 'analysis';
+    if (/skill|plugin|tool|system|workflow|automate|claude/.test(d)) return 'meta';
+    return 'ops';
+  };
+  const toTitleCase = str => str.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+
+  const parseFrontmatter = text => {
+    const m = text.replace(/\r\n/g,'\n').match(/^---\n([\s\S]*?)\n---/);
+    if (!m) return null;
+    const block = m[1];
+    const nameMatch = block.match(/^name:\s*(.+)$/m);
+    if (!nameMatch) return null;
+    const rawName = nameMatch[1].trim();
+    let fullDesc = '';
+    const descLineMatch = block.match(/^description:\s*(.*)$/m);
+    if (descLineMatch) {
+      const inline = descLineMatch[1].trim();
+      if (inline === '|' || inline === '>' || inline === '') {
+        const descIdx = block.indexOf(descLineMatch[0]);
+        const afterDesc = block.slice(descIdx + descLineMatch[0].length);
+        const lines = [];
+        for (const line of afterDesc.split('\n')) {
+          if (/^\s+/.test(line) || line.trim() === '') lines.push(line.trim());
+          else if (line.trim()) break;
+        }
+        fullDesc = lines.filter(Boolean).join(' ').trim();
+      } else { fullDesc = inline; }
+    }
+    if (!fullDesc) return null;
+    const useWhenIdx = fullDesc.indexOf('Use when');
+    const actionDesc = useWhenIdx > 0 ? fullDesc.slice(0, useWhenIdx).trim() : fullDesc;
+    const useWhenPart = useWhenIdx > 0 ? fullDesc.slice(useWhenIdx) : '';
+    const mentionIdx = useWhenPart.indexOf('mention');
+    const mentionPart = mentionIdx >= 0 ? useWhenPart.slice(mentionIdx) : useWhenPart;
+    const trigMatches = (mentionPart || fullDesc).match(/"([^"]{2,60})"/g) || [];
+    const triggers = trigMatches.length > 0
+      ? [...new Set(trigMatches.slice(0,6).map(x => x.replace(/^"|"$/g,'')))]
+      : [rawName];
+    const firstSentence = actionDesc.split(/\.(?:\s|$)/)[0].replace(/^["']|["']$/g,'').trim().slice(0,130);
+    return { rawName, displayName: toTitleCase(rawName), actionDesc: actionDesc.slice(0,300), firstSentence, triggers };
+  };
+
+  const onFolderSelect = async e => {
+    const files = Array.from(e.target.files || []);
+    const skillFiles = files.filter(f => f.name.toLowerCase() === 'skill.md' || (f.webkitRelativePath||'').split('/').pop().toLowerCase() === 'skill.md');
+    const parsed = [];
+    for (const skillFile of skillFiles) {
+      try {
+        const text = await skillFile.text();
+        const fm = parseFrontmatter(text);
+        if (!fm) continue;
+        const parts = (skillFile.webkitRelativePath || skillFile.name).split('/');
+        const folderName = parts.length >= 2 ? parts[parts.length - 2] : fm.rawName;
+        const id = folderName.toLowerCase().replace(/[^a-z0-9-]/g,'-');
+        parsed.push({ id, name: { tr: fm.displayName, en: fm.displayName }, desc: { tr: fm.actionDesc, en: fm.actionDesc }, triggers: fm.triggers, source: 'user', category: detectCategory(fm.actionDesc), bestFor: { tr: fm.firstSentence, en: fm.firstSentence } });
+      } catch(err) { console.warn('Could not parse', skillFile.name, err); }
+    }
+    if (parsed.length > 0) {
+      const deduped = parsed.filter((s, i, arr) => arr.findIndex(x => x.id === s.id) === i);
+      setCustomSkills(deduped);
+      LS.set('sk_custom', deduped);
+      setToast({ msg: `${deduped.length} skill yüklendi`, icon: 'check' });
+    } else {
+      setToast({ msg: 'SKILL.md dosyaları bulunamadı', icon: 'alertTriangle' });
+    }
+    if (folderInputRef.current) folderInputRef.current.value = '';
+  };
+
+  const onReload = async () => {
+    if (!window.showDirectoryPicker) {
+      setToast({ msg: 'Tarayıcınız File System API desteklemiyor', icon: 'alertTriangle' });
+      return;
+    }
+    setIsReloading(true);
+    try {
+      let handle = dirHandle;
+
+      // Verify / re-request permission on existing handle
+      if (handle) {
+        const perm = await handle.queryPermission({ mode: 'read' });
+        if (perm !== 'granted') {
+          const req = await handle.requestPermission({ mode: 'read' });
+          if (req !== 'granted') handle = null;
+        }
+      }
+
+      // First time (or permission lost) — open directory picker
+      if (!handle) {
+        handle = await window.showDirectoryPicker({ mode: 'read' });
+        setDirHandle(handle);
+        await IDB.set('dirHandle', handle);
+      }
+
+      const files = await readSkillFiles(handle);
+      const parsed = [];
+      for (const { text, path } of files) {
+        const fm = parseFrontmatter(text);
+        if (!fm) continue;
+        const parts = path.split('/');
+        const folderName = parts.length >= 2 ? parts[parts.length - 2] : fm.rawName;
+        const id = folderName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+        parsed.push({
+          id,
+          name: { tr: fm.displayName, en: fm.displayName },
+          desc: { tr: fm.actionDesc, en: fm.actionDesc },
+          triggers: fm.triggers,
+          source: 'user',
+          category: detectCategory(fm.actionDesc),
+          bestFor: { tr: fm.firstSentence, en: fm.firstSentence },
+        });
+      }
+
+      if (parsed.length > 0) {
+        const deduped = parsed.filter((s, i, arr) => arr.findIndex(x => x.id === s.id) === i);
+        setCustomSkills(deduped);
+        LS.set('sk_custom', deduped);
+        setToast({ msg: `${deduped.length} skill yüklendi`, icon: 'check' });
+      } else {
+        setToast({ msg: 'SKILL.md dosyası bulunamadı', icon: 'alertTriangle' });
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') setToast({ msg: 'Hata: ' + err.message, icon: 'alertTriangle' });
+    } finally {
+      setIsReloading(false);
+    }
+  };
+
+  const shouldGroup = activeCat === 'all' && !query.trim();
+  const groupedByCategory = useMemo(() => {
+    if (!shouldGroup) return null;
+    return [...CATEGORIES]
+      .map(c => ({ ...c, items: filtered.filter(s => s.category === c.id) }))
+      .filter(g => g.items.length > 0)
+      .sort((a,b) => (a[lang]||a.en).localeCompare(b[lang]||b.en));
+  }, [filtered, shouldGroup, lang]);
+
+  const gridClass = `app layout-${tweaks.layout} density-${tweaks.density}`;
+
+  return (
+    <div className={gridClass}>
+      {tweaks.orbs && (
+        <div className="ambient" aria-hidden="true">
+          <div className="orb orb-1"/><div className="orb orb-2"/><div className="orb orb-3"/>
+        </div>
+      )}
+
+      <header className="header">
+        <div className="container header-inner">
+          <div className="brand">
+            <div className="brand-mark"><Icon name="zap" size={20}/></div>
+            <div><div className="brand-title">{t.brandTitle}</div></div>
+          </div>
+          <div className="header-spacer"/>
+          <div className="count-badge"><span className="dot"/> {allSkills.length} {t.skills}</div>
+          <button className="icon-btn" onClick={() => window.print()} title={t.print}><Icon name="printer" size={17}/></button>
+          <button className="icon-btn" onClick={() => setColorModal(true)} title={t.chooseColor}><Icon name="palette" size={17}/></button>
+          <button className={`icon-btn ${tweaksOpen?'is-active':''}`} onClick={() => setTweaksOpen(v => !v)} title={t.tweaksTitle}><Icon name="sliders" size={17}/></button>
+          <input ref={folderInputRef} type="file" accept=".md" multiple hidden onChange={onFolderSelect}/>
+          <button className="icon-btn" onClick={() => folderInputRef.current?.click()} title={t.loadSkills}><Icon name="folder" size={17}/></button>
+          <button className="icon-btn" onClick={onReload} title={t.reloadSkills} disabled={isReloading}>
+            <Icon name="refresh" size={17} style={isReloading ? { animation: 'spin 0.8s linear infinite' } : {}}/>
+          </button>
+          <button className="theme-toggle" onClick={toggleMode} aria-label="Toggle dark/light mode">
+            <span className="theme-thumb"><Icon name={mode==='dark'?'moon':'sun'} size={14}/></span>
+          </button>
+        </div>
+      </header>
+
+      <div className="container">
+        <section className="hero">
+          <div className="hero-eyebrow">{t.heroEyebrow}</div>
+          <h1 className="hero-title">{t.heroTitle1} <span className="grad">{t.heroTitle2}</span></h1>
+          <p className="hero-sub">{t.heroSub}</p>
+          <div className="search-wrap">
+            <span className="search-icon"><Icon name="search" size={18}/></span>
+            <input ref={searchRef} className="search-input" placeholder={t.searchPlaceholder} value={query} onChange={e => setQuery(e.target.value)}/>
+            <div className="search-shortcut">
+              {query ? (
+                <button className="clear-btn" onClick={() => setQuery('')}><Icon name="x" size={12}/></button>
+              ) : (
+                <span className="kbd">/</span>
+              )}
+            </div>
+          </div>
+          <div className="search-modes">
+            <button className={`mode-btn ${searchMode==='smart'?'active':''}`} onClick={() => setSearchMode('smart')}><Icon name="sparkles" size={14}/> {t.smart}</button>
+            <button className={`mode-btn ${searchMode==='name'?'active':''}`} onClick={() => setSearchMode('name')}><Icon name="tag" size={14}/> {t.byName}</button>
+            <button className={`mode-btn ${searchMode==='trigger'?'active':''}`} onClick={() => setSearchMode('trigger')}><Icon name="command" size={14}/> {t.byTrigger}</button>
+          </div>
+        </section>
+
+        <section className="stats">
+          <div className="stat"><span className="stat-value">{allSkills.length}</span><span className="stat-label">{t.total} {t.skills}</span></div>
+          <div className="stat"><span className="stat-value">{CATEGORIES.length}</span><span className="stat-label">{t.categories}</span></div>
+          <button className={`stat clickable ${srcOpen?'open':''}`} onClick={() => setSrcOpen(v => !v)}>
+            <span className="stat-value">{sourceBreakdown.length}</span>
+            <span className="stat-label">{t.sources} · {t.details}</span>
+            <Icon name="chevronDown" size={14}/>
+          </button>
+          <div className="stat stat-dup">
+            <Icon name="alertTriangle" size={14}/>
+            <span className="stat-value">{dupGroups.length}</span>
+            <span className="stat-label">{t.duplicates}</span>
+          </div>
+        </section>
+
+        {srcOpen && (
+          <div className="source-panel">
+            {sourceBreakdown.map(b => (
+              <span className="source-pill" key={b.id}>
+                <span className="dot" style={{background: b.src.color}}/>
+                {b.src[lang] || b.src.en || b.id}
+                <span className="cnt">{b.cnt}</span>
+              </span>
+            ))}
+          </div>
+        )}
+
+        <section className="section section-spot">
+          <div className="spotlight">
+            <div style={{width:40,height:40,borderRadius:10,background:'var(--accent-10)',border:'1px solid var(--accent-20)',display:'grid',placeItems:'center',color:'var(--accent)',flexShrink:0}}>
+              <Icon name="sparkles" size={16}/>
+            </div>
+            <div className="spotlight-body">
+              <div className="spotlight-kicker">{t.spotKicker}</div>
+              <div className="spotlight-name">{spotlight.name[lang] || spotlight.name.en}</div>
+              <div className="spotlight-for">{t.spotBestFor} {spotlight.bestFor[lang] || spotlight.bestFor.en}</div>
+            </div>
+            <button className="spot-refresh" onClick={rollSpotlight} title="New spotlight"><Icon name="refresh" size={16}/></button>
+          </div>
+        </section>
+
+        {favoriteSkills.length > 0 && (
+          <section className="section section-fav">
+            <div className="section-head">
+              <Icon name="pin" size={14}/>
+              <h3>{t.favorites}</h3>
+              <span className="cnt">{favoriteSkills.length}</span>
+            </div>
+            <div className="grid">
+              {favoriteSkills.map((s,i) => (
+                <SkillCard key={s.id} skill={s} lang={lang} fav={true} onToggleFav={toggleFav}
+                  expanded={expandedId===s.id+':fav'}
+                  onClick={() => setExpandedId(cur => cur===s.id+':fav' ? null : s.id+':fav')}
+                  index={i}/>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {recentSkills.length > 0 && (
+          <section className="section section-recent">
+            <div className={`section-head ${recentClosed?'closed':''}`} onClick={() => setRecentClosed(v => !v)}>
+              <Icon name="chevronDown" size={14} className="chev"/>
+              <Icon name="history" size={14}/>
+              <h3>{t.recent}</h3>
+              <span className="cnt">{recentSkills.length}</span>
+              <div className="actions">
+                <button className="mini-btn" onClick={e => { e.stopPropagation(); clearRecents(); }}>
+                  <Icon name="trash" size={12}/> {t.clear}
+                </button>
+              </div>
+            </div>
+            {!recentClosed && (
+              <div className="grid">
+                {recentSkills.map((s,i) => (
+                  <SkillCard key={s.id} skill={s} lang={lang} fav={favs.includes(s.id)} onToggleFav={toggleFav}
+                    expanded={expandedId===s.id+':rec'}
+                    onClick={() => setExpandedId(cur => cur===s.id+':rec' ? null : s.id+':rec')}
+                    index={i}/>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {dupGroups.length > 0 && (
+          <div className="dup-banner">
+            <div className={`dup-head ${dupOpen?'open':''}`} onClick={() => setDupOpen(v => !v)}>
+              <div className="icon-wrap"><Icon name="alertTriangle" size={14}/></div>
+              <span>{t.dupBanner} <strong>({dupGroups.length})</strong></span>
+              <Icon name="chevronDown" className="chev" size={14}/>
+            </div>
+            {dupOpen && (
+              <div className="dup-body">
+                {dupGroups.map(g => (
+                  <div className="dup-group" key={g.id}>
+                    <div className="dup-group-title">{g.title[lang]}</div>
+                    <div className="dup-group-items">
+                      {g.ids.map(id => {
+                        const s = allSkills.find(x => x.id === id);
+                        if (!s) return null;
+                        const src = SOURCES[s.source] || {};
+                        return (
+                          <span key={id} className="dup-item">
+                            <span className="src-dot" style={{background: src.color}}/>
+                            {s.name[lang] || s.name.en}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <section className="tabs" role="tablist">
+          <button className={`tab ${activeCat==='all'?'active':''}`} onClick={() => setActiveCat('all')}>
+            {t.all} <span className="cnt">{catCounts.all}</span>
+          </button>
+          {CATEGORIES.map(c => (
+            <button key={c.id} className={`tab ${activeCat===c.id?'active':''}`} onClick={() => setActiveCat(c.id)}>
+              {c[lang]} <span className="cnt">{catCounts[c.id]||0}</span>
+            </button>
+          ))}
+        </section>
+
+        {(query.trim() || activeCat !== 'all') && (
+          <div className="result-count">
+            {t.showing} <strong>{filtered.length}</strong> {t.of} <strong>{allSkills.length}</strong> {t.skills}
+          </div>
+        )}
+
+        {shouldGroup && groupedByCategory ? (
+          <div>
+            {groupedByCategory.map(g => {
+              const closed = !!collapsedCats[g.id];
+              return (
+                <div className="cat-group" key={g.id}>
+                  <div className={`cat-group-head ${closed?'closed':''}`} onClick={() => toggleCat(g.id)}>
+                    <Icon name="chevronDown" size={16} className="chev"/>
+                    <h4>{g[lang]||g.en}</h4>
+                    <span className="cnt">{g.items.length}</span>
+                  </div>
+                  {!closed && (
+                    <div className="grid">
+                      {g.items.map((s,i) => (
+                        <SkillCard key={s.id} skill={s} lang={lang} fav={favs.includes(s.id)} onToggleFav={toggleFav}
+                          expanded={expandedId===s.id} onClick={() => onCardClick(s.id)} index={i}/>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="grid">
+            {filtered.map((s,i) => (
+              <SkillCard key={s.id} skill={s} lang={lang} fav={favs.includes(s.id)} onToggleFav={toggleFav}
+                expanded={expandedId===s.id} onClick={() => onCardClick(s.id)} index={i}/>
+            ))}
+          </div>
+        )}
+
+        <footer className="footer">
+          <div className="footer-divider"/>
+          <div><strong>{t.footerLine}</strong> · v1.0.0 · {new Date().getFullYear()}</div>
+        </footer>
+      </div>
+
+      <button className={`to-top ${showTop?'show':''}`} onClick={() => window.scrollTo({top:0,behavior:'smooth'})} title={t.backTop}>
+        <Icon name="arrowUp" size={18}/>
+      </button>
+      {tweaksOpen && <TweaksPanel tweaks={tweaks} setTweaks={setTweaks} lang={lang} setLang={setLang} onClose={() => setTweaksOpen(false)}/>}
+      <ColorModal open={colorModal} onClose={() => setColorModal(false)} current={color} onPick={pickColor} lang={lang}/>
+      {toast && (
+        <div className="toast">
+          <Icon name={toast.icon||'check'} size={14}/>
+          {toast.msg}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
