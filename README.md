@@ -155,10 +155,10 @@ Her kart şunları içerir:
 
 ```bash
 # Repo'yu klonlayın
-git clone https://github.com/KULLANICI_ADINIZ/skills-dashboard.git
+git clone https://github.com/ZenAI360/skillsdashboard.git
 
 # Klasöre girin
-cd skills-dashboard
+cd skillsdashboard
 
 # Skills Dashboard.html dosyasını tarayıcıda açın
 # (Chrome veya Edge önerilir — File System Access API desteği için)
@@ -342,10 +342,10 @@ Each card contains:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/skills-dashboard.git
+git clone https://github.com/ZenAI360/skillsdashboard.git
 
 # Enter the folder
-cd skills-dashboard
+cd skillsdashboard
 
 # Open Skills Dashboard.html in your browser
 # (Chrome or Edge recommended — for File System Access API support)
