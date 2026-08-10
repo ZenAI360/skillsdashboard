@@ -1,3 +1,5 @@
+
+
 # Skills Dashboard
 
 > 🇹🇷 Türkçe açıklama aşağıda · 🇬🇧 English description below
@@ -175,8 +177,7 @@ Hiçbir bağımlılık yok. Sunucu gerekmez. Dosyayı çift tıklayarak açabili
 ```markdown
 ---
 name: skill-adi
-description: Skill'in ne yaptığını açıklayan bir veya birkaç cümle.
-  Use when users mention "tetikleyici ifade 1", "tetikleyici ifade 2".
+description: "Skill'in ne yaptığını açıklayan bir veya birkaç cümle. Use when users mention 'tetikleyici ifade 1', 'tetikleyici ifade 2'."
 ---
 ```
 
@@ -362,8 +363,7 @@ No dependencies. No server. You can double-click the file to open it.
 ```markdown
 ---
 name: skill-name
-description: One or more sentences describing what the skill does.
-  Use when users mention "trigger phrase one", "trigger phrase two".
+description: "One or more sentences describing what the skill does. Use when users mention 'trigger phrase one', 'trigger phrase two'."
 ---
 ```
 
